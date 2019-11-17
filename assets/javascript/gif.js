@@ -1,17 +1,8 @@
 
- // Create to search query for an emotion
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + 
-        topics + "&api_key=VX622cLsOOgpgoP4s16d5fPVpe2wOAit&q=emotions&limit=10&offset=0&rating=PG&lang=en";
-
-// API and key with a query
-
-
-
-
 // Create an array of emotions/topics
 var topics = ['Sad', 'Happy', 'Angry', 'Funny'];
 var emotionBtn;
-var emotionImage;
+var emotionGif;
 
 function createButtons(){
 // Dynamically create a button to the html and append new images
@@ -21,67 +12,81 @@ function createButtons(){
         // Assign name to button
         emotionBtn.text(topics[i]);
         // Assign attributes
-        emotionBtn.attr("data-name", topics[i]);
+        emotionBtn.attr("data-emotion", topics[i]);
         // Add a button class
         emotionBtn.addClass("btn btn-info");
         // Add button to the html
-        $("#topicsBtn").append(emotionBtn)   
-        
-    }
+        $("#topicsBtn").append(emotionBtn)         
+        }
 }
-
+// Create to search query for an emotion
 // Display giphy's
 function displayEmotions() {
-    var emotion = $(this).attr("data-name");
-    // Clear the area where the gif's are displayed, before showing more
+// Clear the area where the gif's are displayed, before showing more
     $('#giphy').empty();
+    $("#message").empty();
+    
+    var emotion = $(this).attr("data-emotion");
     // Display url, API and key
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + 
-    topics + "&api_key=VX622cLsOOgpgoP4s16d5fPVpe2wOAit&q=emotions&limit=10&offset=0&rating=PG&lang=en";
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+     emotion + "&api_key=9650BvuKATlbmPyD9rgYg7xqleS0A50f&limit=10";
     // Perform AJAX query to get giphy results
     $.ajax({
         url: queryURL,
         method: "GET"
-      }).done(function(response) {
-            console.log(respopnse);
-            var results = response.data;
-            // Adds a message for the user
-            $("#message").append("<h4>" + "Click to animate. Click to pause" + "</h4>");
-            // Creating logic logic for the rating
-            // Creating logic for displaying still images and animatation
-            for (var i = 0; i < results.length; i++) {
-                if (results[i].rating !== "r" && results[i].rating !== "pg")  {
-                    var gifDiv = $("div class='item'>");
-                    var rating = results[i].rating;
-                    var p = $("<p>").txt("Rating: " + rating);
-                    var emotionImage = $("<img");
-                    emotionImage.attr("src", results[i].images.fixed_height_still.url);
-                    emotionImage.attr("data-still", results[i].images.fixed_height_still.url);
-                    emotionImage.attr("data-animate", results[i].images.fixed_height.url);
-                    emotionImage.attr("data-state", "still");
-                    emotionImage.addClass ("img-fluid gif border border-primary");
-                    gifDiv.prepend(p);
-                    gifDiv.prepend(emotionImage)
-                    $("#giphy").append(gifDiv)
+      })
+    // After data comes back from request
+      .then(function(response) {
+        console.log(queryURL);
+        var results = response.data;
+        // Adds a message for the user
+        $("#message").append("<h4>" + "Click to animate. Click to pause" + "</h4>");
+        // Creating logic logic for the rating
+        // Creating logic for displaying still images and animatation
+        for (var i = 0; i < results.length; i++) {
+            if (results[i].rating !== "r" && results[i].rating !== "pg")  {
+                var gifDiv = $("<div class='item'>");
+                var rating = results[i].rating;
+                var p = $("<p>").txt("Rating: " + rating);
+                var emotionGif = $("<img>");
+                emotionGif.attr("src", results[i].images.fixed_height_still.url);
+                emotionGif.attr("data-still", results[i].images.fixed_height_still.url);
+                emotionGif.attr("data-animate", results[i].images.fixed_height.url);
+                emotionGif.attr("data-state", "still");
+                emotionGif.addClass ("img-fluid gif border border-primary");
+                gifDiv.prepend(p);
+                gifDiv.prepend(emotionGif);
+                $("#giphy").append(gifDiv);
 
-                }
             }
+        }
       })
 
 }
 
 // User inpput button
-$("addGif").on("click", function(event) {
-    event.preventDefault();
+$("#addGif").on("click", function(event) {
+        event.preventDefault();
     // Change values to lower case
     var userInput = $("#userInput").val().toLowerCase();
     // Empty the text box, after submitting
     $("#userInput").val("");
-    // This is an alert to the user, if a topic already exists
+    // This is logic and an alert to the user, if a topic already exists
     if (topics.indexOf(userInput) > -1) {
         alert(userInput + " is already already a topic.  Please make another choice");
+      }else if (userInput === "" || userInput === null){
+        return false;
+      }else if  (topics.indexOf(userInput) === -1) {
+          topics.push(userInput);
+          console.log(topics);
       }
-})
+});
+
+createButtons();
+
+// This is an event listener to create a new topic button
+$(document).on("click", ".topicsBtn", displayEmotions);
+
 
 
 
