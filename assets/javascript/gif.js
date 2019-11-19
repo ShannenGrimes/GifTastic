@@ -29,7 +29,7 @@ function displayEmotions() {
     var emotion = $(this).attr("data-emotion");
     // Display url, API and key
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-     emotion + "&api_key=opcXvH1EedAhrs1Wgk3307og6EraPeHR&limit=10";
+     x + "&api_key=opcXvH1EedAhrs1Wgk3307og6EraPeHR&limit=10";
     // Perform AJAX query to get giphy results
     $.ajax({
         url: queryURL,
