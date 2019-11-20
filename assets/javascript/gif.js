@@ -6,18 +6,18 @@ var emotionGif;
 
 function createButtons(){
 // Dynamically create a button to the html and append new images
-    $("#topicsBtn").empty();
-    for (var i=0; i < topics.length; i++) {
-        var emotionBtn = $("<button>");
-        // Assign name to button
-        emotionBtn.text(topics[i]);
-        // Assign attributes
-        emotionBtn.attr("data-emotion", topics[i]);
-        // Add a button class
-        emotionBtn.addClass("btn btn-info");
-        // Add button to the html
-        $("#topicsBtn").append(emotionBtn)         
-        }
+$("#topicsBtn").empty();
+  for (var i=0; i < topics.length; i++) {
+    var emotionBtn = $("<button>");
+      // Assign name to button
+      emotionBtn.text(topics[i]);
+      // Assign attributes
+      emotionBtn.attr("data-emotion", topics[i]);
+      // Add a button class
+      emotionBtn.addClass("btn btn-info");
+      // Add button to the html
+      $("#topicsBtn").append(emotionBtn);         
+  }
 }
 // Create to search query for an emotion
 // Display giphy's
@@ -28,8 +28,7 @@ function displayEmotions() {
     
     var emotion = $(this).attr("data-emotion");
     // Display url, API and key
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-     x + "&api_key=opcXvH1EedAhrs1Wgk3307og6EraPeHR&limit=10";
+    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=VX622cLsOOgpgoP4s16d5fPVpe2wOAit&q=emotion&limit=10&offset=0&rating=PG&lang=en";
     // Perform AJAX query to get giphy results
     $.ajax({
         url: queryURL,
